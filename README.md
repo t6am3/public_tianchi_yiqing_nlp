@@ -52,6 +52,6 @@ project
 		|-- run.sh                  ## 入口
         |-- run.py                  ## 训练、测试的代码
         |-- data_augmentation.py    ## 数据增强的代码
-    |-- prediction_result       # 预测结果文件夹
+    	|-- prediction_result       # 预测结果文件夹
 ```
 ## 3. 参考资料
