@@ -4,8 +4,10 @@
 
 ## Index
 1. 算法说明
-2. 代码结构说明
-3. 参考资料
+2. 代码说明
+3. 运行环境
+4. 运行说明
+5. 参考资料
 ____
 ## 1. 算法说明
 本解决方案使用了基于病名\药名的数据增强+模型融合+训练时-测试时增强+伪标签的解决方案
@@ -21,7 +23,7 @@ ____
 
 * 模型融合 models fushion
 
-本解决方案使用了ernie + bert-wwm-ext + roberta-large-pair的融合模型，对最后的结果使用平均值。具体的来源和下载地址见参考资料。
+本解决方案使用了ernie + bert_wwm_-_ext + roberta-large-pair的融合模型，对最后的结果使用平均值。具体的来源和下载地址见参考资料。
 
 * 训练时-测试时增强 train-test time augmentation
 
@@ -33,25 +35,83 @@ ____
 
 在预测完成后，使用预测结果和原训练集一起作为新的训练集再次训练一个模型做预测。
 
-## 2. 代码结构说明
+## 2. 代码说明
+* 代码主体结构  
+依照代码规范的代码主体结构
 ```
 project
-	|-- README.md               # README说明
-	|-- data
-        |-- Dataset                 ## 官方提供的原始数据集
-            |-- train.csv
-            |-- dev.csv
-            |-- test.csv
-        |-- External                ## 额外资源
-            |-- models                  ### 预训练模型
-            |-- knowledge               ### 额外数据知识
-	|-- user_data               # 用户数据文件夹
-		|-- model_data              ## fine-tuned 模型        
-        |-- tmp_data                ## 中间生成数据
-	|-- code                    # 代码
-		|-- run.sh                  ## 入口
-        |-- run.py                  ## 训练、测试的代码
-        |-- data_augmentation.py    ## 数据增强的代码
-    	|-- prediction_result       # 预测结果文件夹
+	|-- README.md               
+	|-- data                           
+	|-- user_data                            
+	|-- code                   
+    |-- prediction_result       
 ```
-## 3. 参考资料
+* `data` 文件夹  
+其中 `Dataset` 文件夹下内容已经确定，这里对 `External` 文件夹下进行说明
+```
+|-- data
+    |-- Dataset
+    |-- External
+        |-- models
+            |-- ernie
+            |-- chinese_wwm_ext_pytorch
+            |-- roberta_large_pair
+        |-- knowledge
+            |-- sick2drugs.json
+```
+其中， `models` 文件夹下为下载的预训练模型， `knowledge` 文件夹下为从互联网获取的医药专业知识映射：适用症的用药列表。获取的爬虫文件放在 `code` 文件夹下。
+* `user_data` 文件夹
+```
+|-- user_data
+	|-- model_data
+		|-- pretrained
+        |-- pretrained_reverse
+        |-- pseudo
+	|-- tmp_data
+		|-- tmp.dat
+```
+`model_data` 文件夹下放有三个文件夹，分别为 `pretrained` ， `pretrained_reverse` 以及 `pseudo` 文件夹，由于本解决方案使用了正序-逆序的训练时-测试时增强，故需要使用正序以及逆序两套模型，最后使用伪标签也会再次训练一个模型，分别保存在这三个文件夹下。
+* `code` 文件夹
+```
+|-- code
+    |-- run.sh
+    |-- run.py
+    |-- run_glue_for_test.py
+    |-- data_augmentation.py
+    |-- drug_crawler.py
+```
+`code` 文件下存放着   
+* `run.sh` 为训练以及测试的入口脚本; 
+* `run.py` 为算法的主体代码; 
+* `run_glue_for_test.py` 为训练模型的主体代码; 修改自huggingface的 [`transformers/examples/run_glue.py`](https://github.com/huggingface/transformers/blob/master/examples/run_glue.py); 
+* `data_augmentation.py` 为数据增强的代码。
+> 注: **修改了 `transformers` 的 `processor` 部分源码来适应本次比赛任务**，修改后的源码为 `code` 文件夹下 `data` 文件夹，运行时安装完 `transformers` 后替换即可。
+## 3. 运行环境
+* 软件环境  
+
+|dependency|version|
+|-|-|
+|pytorch|1.3.1|
+|cuda|10.1.243|
+|numpy|1.17.3|
+|pandas|0.25.3|
+|transformers|2.5.1|
+|tqdm|4.36.1|
+* 硬件配置  
+因为 `roberta_large_pair` 使用**128**的`max_seq_length`，故16G显卡会OOM，原本训练时使用的是一张NVIDIA V100 NVLINK 32GB。
+
+## 4. 运行说明
+* step1 使用 `python data_augmentaion.py` 生成增强数据
+* step2 使用 `sh run.sh` 来训练和测试，具体的参数可以使用 `python run.py --help` 来查看参数列表及其用途。 
+
+## 5. 参考资料
+### 预训练模型来源
+* [ernie](https://github.com/649453932/Bert-Chinese-Text-Classification-Pytorch)  from 百度，这里提供的地址是pytorch版本的仓库。
+[下载地址](https://pan.baidu.com/s/1qSAD5gwClq7xlgzl_4W3Pw)
+* [bert-wwm-ext](https://github.com/ymcui/Chinese-BERT-wwm) from 哈工大讯飞联合实验室
+[下载地址](https://pan.iflytek.com/link/B9ACE1C9F228A0F42242672EF6CE1721)
+* [roberta_large_pair](https://github.com/CLUEbenchmark/CLUEPretrainedModels) from CLUE
+[下载地址](https://pan.baidu.com/s/1hoR01GbhcmnDhZxVodeO4w)
+
+### 先验医药知识来源
+* [丁香医生用药助手查询](http://drugs.dxy.cn/search/indication.htm)
