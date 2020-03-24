@@ -81,10 +81,11 @@ project
     |-- drug_crawler.py
 ```
 `code` 文件下存放着   
-* `run.sh` 为训练以及测试的入口脚本; 
-* `run.py` 为算法的主体代码; 
-* `run_glue_for_test.py` 为训练模型的主体代码; 修改自huggingface的 [`transformers/examples/run_glue.py`](https://github.com/huggingface/transformers/blob/master/examples/run_glue.py); 
-* `data_augmentation.py` 为数据增强的代码。
+* `run.sh` 为训练以及测试的入口脚本
+* `run.py` 为算法的主体代码 
+* `run_glue_for_test.py` 为训练模型的主体代码; 修改自huggingface的 [`transformers/examples/run_glue.py`](https://github.com/huggingface/transformers/blob/master/examples/run_glue.py)
+* `data_augmentation.py` 为数据增强的代码
+* `drug_crawler.py` 为获取病名——药品名映射词典的爬虫
 > 注: **修改了 `transformers` 的 `processor` 部分源码来适应本次比赛任务**，修改后的源码为 `code` 文件夹下 `data` 文件夹，运行时安装完 `transformers` 后替换即可。
 ## 3. 运行环境
 * 软件环境  
