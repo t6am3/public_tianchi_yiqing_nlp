@@ -1,3 +1,4 @@
-data
-user_data
-prediction_result
+./data
+./user_data
+./prediction_result
+__pycache__
