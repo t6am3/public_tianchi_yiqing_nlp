@@ -23,7 +23,7 @@ ____
 
 * 模型融合 models fushion
 
-本解决方案使用了ernie + bert_wwm_-_ext + roberta-large-pair的融合模型，对最后的结果使用平均值。具体的来源和下载地址见参考资料。
+本解决方案使用了ernie + bert_wwm_ext + roberta_large_pair的融合模型，对最后的结果使用平均值。具体的来源和下载地址见参考资料。
 
 * 训练时-测试时增强 train-test time augmentation
 
@@ -109,10 +109,11 @@ project
 ### 预训练模型来源
 * [ernie](https://github.com/649453932/Bert-Chinese-Text-Classification-Pytorch)  from 百度，这里提供的地址是pytorch版本的仓库。
 [下载地址](https://pan.baidu.com/s/1qSAD5gwClq7xlgzl_4W3Pw)
-* [bert-wwm-ext](https://github.com/ymcui/Chinese-BERT-wwm) from 哈工大讯飞联合实验室
+* [bert_wwm_ext](https://github.com/ymcui/Chinese-BERT-wwm) from 哈工大讯飞联合实验室
 [下载地址](https://pan.iflytek.com/link/B9ACE1C9F228A0F42242672EF6CE1721)
 * [roberta_large_pair](https://github.com/CLUEbenchmark/CLUEPretrainedModels) from CLUE
 [下载地址](https://pan.baidu.com/s/1hoR01GbhcmnDhZxVodeO4w)
 
 ### 先验医药知识来源
 * [丁香医生用药助手查询](http://drugs.dxy.cn/search/indication.htm)
+
