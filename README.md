@@ -1,8 +1,7 @@
 # “公益AI之星”挑战赛-新冠疫情相似句对判定大赛 解决方案
-
+[比赛地址](https://tianchi.aliyun.com/competition/entrance/231776/introduction)
 ## LB:4th(96.30)  
 ### **Team**:tbam3  youfeng@buaa.edu.cn
-
 ## Index
 1. 算法说明
 2. 代码说明
@@ -50,9 +49,10 @@ ____
 |erinie + cwe + roberta-large-pair + train-test_time_aug + oov_sick_data_augmentation + pseudo_label|96.30|
 
 ### 题外话
-* 基本没调参，roberta-large-pair稍微调了一下，但是毕竟dev不是特别可信... 中间一段时间(3.10~3.17)提升比较多，然后最后10天开始玩杂技，比较想通过数据增强来获得更多的提升，一直没有提升...毕竟猜到测试集里的语义匹配信息以及病例信息难度过高...最后2天幡然悔悟调了调参，dev上暴涨，然后LB跌了3个千分点。。。还是头太铁了，调参绝非一日之功。
-* 没有用K折的原因：因为使用train-test time augmentation已经6个模型了，太多了我心里过意不去也不好调，故放弃了K折，实际上我的train-test time augmentation也有一定的降方差作用，其实可以考虑加个3折比较合适。
+* 基本没调参，roberta-large-pair稍微调了一下，但是毕竟dev不是特别可信... 中间一段时间(3.10~3.17)提升比较多，然后最后10天开始玩杂技，比较想通过数据增强来获得更多的提升，一直没有提升...毕竟猜到测试集里的语义匹配信息以及病例信息难度过高...最后2天幡然悔悟调了调参，dev上暴涨3个千分点，然后LB暴跌了3个千分点。。。还是头太铁了，调参绝非一日之功。
+* 没有用K折的原因：因为使用train-test time augmentation已经6个模型了，太多了我心里过意不去也不好调，故放弃了K折，实际上我的train-test time augmentation也有一定的去随机性作用，其实可以考虑加个3折比较合适。
 * 没有用fgm & pgd的原因：纯菜。看了大佬们的post后试了一下，pgd效果爆棚，已经在这个repo里更新了这两个算法和相关的参数。
+* 本人第一次打nlp的比赛，打过两次feature-based，都被吊打。。。奇淫技巧实在不会，所以在一开始的时候就把重心放在数据上，毕竟对新手比较友好，提升的机会更大。
 
 ## 2. 代码说明
 * 代码主体结构  
