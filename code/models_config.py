@@ -6,8 +6,8 @@ LOGITS_PATH = '../user_data/tmp_data/result.npy'
 
 # 训练时的模型配置
 train_config = {
-    'ernie': {},
-    'chinese_wwm_ext_pytorch':{},
+#     'ernie': {},
+#     'chinese_wwm_ext_pytorch':{},
     'roberta_large_pair': {
         'learning_rate': 9e-6,
     }

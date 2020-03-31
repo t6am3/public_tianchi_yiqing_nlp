@@ -28,6 +28,9 @@ class Args():
     data_dir = None
     predict_dir = None
     seed = 43
+    adv_fgm = False
+    adv_pgd = False
+    pgd_k =3
     
     def __init__(self, model_name):
         # 默认参数列表
@@ -271,12 +274,23 @@ def execute_main():
     )
     parser.add_argument("--save_logits", action="store_true", help="是否保存多模型产生的最终logits结果")
     parser.add_argument("--save_ind_logits", action="store_true", help="是否保存多模型分别产生的logits结果")
-    
+    parser.add_argument("--adv_fgm", action="store_true", help="是否使用fast gradient method adv方法")
+    parser.add_argument("--adv_pgd", action="store_true", help="是否使用projected gradient descent adv方法")
+    parser.add_argument(
+        "--pgd_k",
+        default=3,
+        type=int,
+        help="adv训练pgd的步数，默认为3",
+    )
+                            
     execute_args = parser.parse_args()
     
     Args.data_dir = execute_args.data_dir
     Args.predict_dir = execute_args.predict_file
     Args.seed = execute_args.random_seed
+    Args.adv_fgm = execute_args.adv_fgm
+    Args.adv_pgd = execute_args.adv_pgd
+    Args.pgd_k = execute_args.pgd_k
     
     # 准备
     ## 训练时增强数据路径

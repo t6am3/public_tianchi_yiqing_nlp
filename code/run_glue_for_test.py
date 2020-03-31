@@ -30,6 +30,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, Tenso
 from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm, trange
 from models_config import RESULT_PATH, LOGITS_PATH
+from utils.adv import FGM, PGD
 
 from transformers import (
     WEIGHTS_NAME,
@@ -200,6 +201,13 @@ def train(args, train_dataset, model, tokenizer):
         logger.info("  Will skip the first %d steps in the first epoch", steps_trained_in_current_epoch)
 
     tr_loss, logging_loss = 0.0, 0.0
+    
+    if args.adv_fgm:
+        fgm = FGM(model)
+    elif args.adv_pgd:
+        pgd = PGD(model)
+
+        
     model.zero_grad()
     train_iterator = trange(
         epochs_trained, int(args.num_train_epochs), desc="Epoch", disable=args.local_rank not in [-1, 0],
@@ -234,7 +242,29 @@ def train(args, train_dataset, model, tokenizer):
                     scaled_loss.backward()
             else:
                 loss.backward()
-
+                
+            if args.adv_fgm:
+                fgm.attack() # 在embedding上添加对抗扰动
+                loss_adv = model(**inputs)[0]
+                loss_adv.backward() # 反向传播，并在正常的grad基础上，累加对抗训练的梯度
+                fgm.restore() # 恢复embedding参数
+                
+            if args.adv_pgd:
+                pgd.backup_grad()
+                # 对抗训练
+                for t in range(args.pgd_k):
+                    pgd.attack(is_first_attack=(t==0)) # 在embedding上添加对抗扰动, first attack时备份param.data
+                    # 原代码，我觉得这里写的不对, 不需要清零梯度和恢复梯度，只需逐渐累加梯度就行了，在超球形内缓步走
+                    # 再次review发现是对的，因为前面几步的梯度不要累计进去，所有步数走完的梯度和原梯度累计即可
+                    if t != args.pgd_k-1:
+                        model.zero_grad()
+                    else:
+                        pgd.restore_grad()
+                    loss_adv = model(**inputs)[0]
+                    loss_adv.backward() # 反向传播，并在正常的grad基础上，累加对抗训练的梯度
+                pgd.restore() # 恢复embedding参数
+                
+                
             tr_loss += loss.item()
             if (step + 1) % args.gradient_accumulation_steps == 0:
                 if args.fp16:
