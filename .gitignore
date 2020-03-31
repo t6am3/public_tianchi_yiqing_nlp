@@ -2,3 +2,4 @@
 ./user_data
 ./prediction_result
 __pycache__
+runs
