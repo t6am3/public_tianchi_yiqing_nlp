@@ -1,7 +1,5 @@
 # “公益AI之星”挑战赛-新冠疫情相似句对判定大赛 解决方案
-[比赛地址](https://tianchi.aliyun.com/competition/entrance/231776/introduction)
-## LB:4th(96.30)  
-### **Team**:tbam3  youfeng@buaa.edu.cn
+**Team**:tbam3  youfeng@buaa.edu.cn final LB:4th(96.30)  [比赛地址](https://tianchi.aliyun.com/competition/entrance/231776/introduction)
 ## Index
 1. 算法说明
 2. 代码说明
@@ -63,7 +61,7 @@ project
 	|-- data                           
 	|-- user_data                            
 	|-- code                   
-    |-- prediction_result       
+    	|-- prediction_result       
 ```
 * `data` 文件夹  
 其中 `Dataset` 文件夹下内容已经确定，这里对 `External` 文件夹下进行说明
@@ -84,8 +82,8 @@ project
 |-- user_data
 	|-- model_data
 		|-- pretrained
-        |-- pretrained_reverse
-        |-- pseudo
+ 		|-- pretrained_reverse
+        	|-- pseudo
 	|-- tmp_data
 		|-- tmp.dat
 ```
